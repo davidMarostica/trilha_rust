@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/exercicio_3/target/debug/exercicio_3: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/exercicio_3/src/main.rs
