@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/condicionais/target/debug/controle_de_fluxo: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/condicionais/src/main.rs
