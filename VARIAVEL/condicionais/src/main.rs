@@ -49,6 +49,7 @@ fn main() {
     }
 }
 */
+/* 
  fn main() {
     let mut x : i32 = 1;
     while x <= 100 {
@@ -63,4 +64,9 @@ fn main() {
               
     }
 }
-   
+*/
+ fn main() {
+    for number  in 1..=100{
+        println!("Número: {}", number);
+    }
+}
