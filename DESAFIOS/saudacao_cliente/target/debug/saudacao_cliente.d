@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/DESAFIOS/saudacao_cliente/target/debug/saudacao_cliente: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/DESAFIOS/saudacao_cliente/src/main.rs

@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/DESAFIOS/bytebank_saldo/target/debug/bytebank_saldo: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/DESAFIOS/bytebank_saldo/src/main.rs

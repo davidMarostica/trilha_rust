@@ -1,0 +1,14 @@
+# Arquivos de compilação
+/target/
+
+# Arquivos de configuração locais
+Cargo.lock
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Arquivos do editor
+.vscode/
+.idea/
+*.swp
