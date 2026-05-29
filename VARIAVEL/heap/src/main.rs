@@ -61,18 +61,42 @@
 
 
 
+// fn main() {
+//     // Convertendo String em &str usando as_str()
+//     let s1: String = String::from("Olá, mundo!");
+//     let referencia_to_s1: &str = s1.as_str(); // obtendo uma referência &str a partir de s1
+
+//     // Convertendo String em &str fazendo uma referência direta
+//     let s2: String = String::from("Rust é incrível!");
+//     let referencia_to_s2: &str = &s2; // obtendo uma referência
+
+//     println!("String s1: {} - referência: {:p}", s1, &s1);
+//     println!("&str referencia_to_s1: {} - referência: {:p}", referencia_to_s1, &referencia_to_s1);  
+
+//     println!("String s2: {} - referência: {:p}", s2, &s2);
+//     println!("&str referencia_to_s2: {} - referência: {:p}", referencia_to_s2, &referencia_to_s2);
+// }
+
 fn main() {
-    // Convertendo String em &str usando as_str()
-    let s1: String = String::from("Olá, mundo!");
-    let referencia_to_s1: &str = s1.as_str(); // obtendo uma referência &str a partir de s1
+    let s = String::from("texto");  // s entra em escopo.
 
-    // Convertendo String em &str fazendo uma referência direta
-    let s2: String = String::from("Rust é incrível!");
-    let referencia_to_s2: &str = &s2; // obtendo uma referência
+    toma_posse(s);                  // move o valor de s para dentro da função...
+                                    // ... e ele não é mais válido aqui.
 
-    println!("String s1: {} - referência: {:p}", s1, &s1);
-    println!("&str referencia_to_s1: {} - referência: {:p}", referencia_to_s1, &referencia_to_s1);  
+    let x = 5;                      // x entra em escopo.
 
-    println!("String s2: {} - referência: {:p}", s2, &s2);
-    println!("&str referencia_to_s2: {} - referência: {:p}", referencia_to_s2, &referencia_to_s2);
-}
+    faz_uma_copia(x);               // x seria movido para dentro da função,
+                                    // mas i32 é Copy, então está tudo bem em
+                                    // usar x daqui para a frente.
+
+} // Aqui, x sai de escopo, e depois s. Mas como o valor de s foi movido, nada
+  // de especial acontece.
+
+fn toma_posse(uma_string: String) { // uma_string entra em escopo.
+    println!("{}", uma_string);
+} // Aqui, uma_string sai de escopo, e o método `drop` é chamado. A memória que
+  // guarda seus dados é liberada.
+
+fn faz_uma_copia(um_inteiro: i32) { // um_inteiro entra em escopo.
+    println!("{}", um_inteiro);
+} // Aqui, um_inteiro sai de escopo. Nada de especial acontece.
