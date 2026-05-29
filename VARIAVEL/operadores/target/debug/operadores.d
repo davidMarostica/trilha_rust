@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/operadores/target/debug/operadores: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/VARIAVEL/operadores/src/main.rs
