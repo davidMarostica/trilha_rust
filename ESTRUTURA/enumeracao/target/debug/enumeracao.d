@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/enumeracao/target/debug/enumeracao: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/enumeracao/src/main.rs
