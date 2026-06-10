@@ -95,6 +95,7 @@ enum NivelAcesso {
 // Este enum representa endereços IP.
 // Em vez de criar dois structs diferentes (IPv4 e IPv6),
 // usamos um único enum com variantes distintas.
+
 enum IpAddr {
     V4(String),
     V6(String),

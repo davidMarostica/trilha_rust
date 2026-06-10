@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/destructuring/target/debug/destructuring: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/destructuring/src/main.rs
