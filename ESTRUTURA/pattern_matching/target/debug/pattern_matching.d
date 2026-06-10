@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/pattern_matching/target/debug/pattern_matching: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/ESTRUTURA/pattern_matching/src/main.rs
