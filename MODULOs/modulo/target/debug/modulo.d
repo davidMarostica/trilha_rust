@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/MODULOs/modulo/target/debug/modulo: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/MODULOs/modulo/src/enums/mod.rs /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/MODULOs/modulo/src/main.rs /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/MODULOs/modulo/src/models/mod.rs
