@@ -47,7 +47,7 @@ fn exibe_documento(pessoa: &dyn Pessoa) {
 }
 
 fn main() {
-    let pf = PessoaFisica { id: 1, nome: "Joao".to_string(), cpf: "123.456.789-00".to_string() };
+    let pf = PessoaFisica { id: 1, nome: "David".to_string(), cpf: "123.456.789-00".to_string() };
     let pj = PessoaJuridica { id: 2, nome: "Casa do Pão".to_string(), cnpj: "00.000.000/0001-00".to_string() };
 
     // Exibindo os documentos
