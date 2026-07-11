@@ -182,7 +182,8 @@
 //     }
 // }
 
-// // =========== Error Types Customizados com Trait Debug ============
+ // =========== Error Types Customizados com Trait Debug ============
+
 use std::error::Error;
 use std::fs::File;
 use std::io::{self, Read};
