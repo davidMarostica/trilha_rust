@@ -1,18 +1,57 @@
 ////// ===== Operador Option ======
-fn encontrar_divisor(numero: i32) -> Option<i32> {
-    if numero % 2 == 0 {
-        Some(2) // Um divisor encontrado
-    } else if numero % 3 == 0 {
-        Some(3) // Outro divisor encontrado
+
+
+// fn encontrar_divisor(numero: i32) -> Option<i32> {
+//     if numero % 2 == 0 {
+//         Some(2) // Um divisor encontrado
+//     } else if numero % 3 == 0 {
+//         Some(3) // Outro divisor encontrado
+//     } else {
+//         None // Nenhum divisor encontrado
+//     }
+// }
+
+// fn main() {
+//     let numero = 1;
+//     match encontrar_divisor(numero) {
+//         Some(divisor) => println!("Divisor encontrado: {}", divisor),
+//         None => println!("Nenhum divisor encontrado para {}", numero),
+//     }
+// }
+
+/////// ===== Operador Result ======
+
+// Enum Result já faz parte da biblioteca padrão do Rust
+// enum Result<T, E> {
+//     Ok(T),
+//     Err(E),
+// }
+
+fn calcular_raiz_quadrada(numero: f64) -> Result<f64, String> {
+    if numero >= 0.0 {
+        Ok(numero.sqrt()) // Retorna a raiz quadrada do número
     } else {
-        None // Nenhum divisor encontrado
+        Err(String::from("número negativo não possui raiz quadrada real")) // Retorna um erro
     }
 }
 
+fn calcular_raiz_quadrada2(numero: f64) -> Result<f64, String> {
+    let r = calcular_raiz_quadrada(numero)?; // Se Err, retorna imediatamente
+    Ok(r) // Se Ok, retorna o valor
+}
+
 fn main() {
-    let numero = 1;
-    match encontrar_divisor(numero) {
-        Some(divisor) => println!("Divisor encontrado: {}", divisor),
-        None => println!("Nenhum divisor encontrado para {}", numero),
+    let numero = -4.0;
+
+    // Usando a primeira função
+    match calcular_raiz_quadrada(numero) {
+        Ok(raiz) => println!("A raiz quadrada de {} é {}", numero, raiz),
+        Err(e) => println!("Erro: {}", e),
+    }
+
+    // Usando a segunda função com operador ?
+    match calcular_raiz_quadrada2(numero) {
+        Ok(raiz) => println!("Versão 2: raiz quadrada de {} é {}", numero, raiz),
+        Err(e) => println!("Versão 2: erro -> {}", e),
     }
 }
