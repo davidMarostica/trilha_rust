@@ -98,34 +98,70 @@
 
 ///// ======= Macro com metaprogramação para criar metodos de uma Struct =======
 
-// Definindo uma macro para implementar métodos especificados em uma struct.
-macro_rules! implementa_metodos {
-    // Aceita o nome da struct seguido por uma sequência de identificadores (nomes de métodos).
-    ($struct:ident, $($metodo:ident),*) => {
-        impl $struct {
-            // Para cada identificador fornecido, gera um método que imprime uma mensagem.
+// // Definindo uma macro para implementar métodos especificados em uma struct.
+// macro_rules! implementa_metodos {
+//     // Aceita o nome da struct seguido por uma sequência de identificadores (nomes de métodos).
+//     ($struct:ident, $($metodo:ident),*) => {
+//         impl $struct {
+//             // Para cada identificador fornecido, gera um método que imprime uma mensagem.
+//             $(
+//                 fn $metodo(&self) {
+//                     println!("{}::{} foi chamado", stringify!($struct), stringify!($metodo));
+//                 }
+//             )*
+//         }
+//     };
+// }
+
+// // Definindo uma struct de exemplo.
+// struct ExemploStruct;
+
+// // Usando a macro para adicionar métodos à struct `ExemploStruct`.
+// implementa_metodos!(ExemploStruct, metodo_a, metodo_b, metodo_c);
+
+// fn main() {
+//     let exemplo = ExemploStruct;
+    
+//     // Chamando os métodos gerados pela macro.
+//     exemplo.metodo_a();
+//     exemplo.metodo_b();
+//     exemplo.metodo_c();
+// }
+
+
+//// ====== Macro para criar atributos =======
+
+macro_rules! define_struct_com_atributos {
+    // A macro aceita o nome da struct seguido por uma lista de pares (nome do atributo: tipo do atributo)
+    ($nome:ident, $($campo:ident: $tipo:ty),*) => {
+        struct $nome {
+            // Gera um campo para cada par nome:tipo fornecido
             $(
-                fn $metodo(&self) {
-                    println!("{}::{} foi chamado", stringify!($struct), stringify!($metodo));
-                }
+                $campo: $tipo,
             )*
         }
     };
 }
 
-// Definindo uma struct de exemplo.
-struct ExemploStruct;
-
-// Usando a macro para adicionar métodos à struct `ExemploStruct`.
-implementa_metodos!(ExemploStruct, metodo_a, metodo_b, metodo_c);
+// Usando a macro para definir uma nova struct com atributos especificados
+define_struct_com_atributos!(
+    Pessoa,
+    nome: String,
+    idade: u8,
+    email: String
+);
 
 fn main() {
-    let exemplo = ExemploStruct;
-    
-    // Chamando os métodos gerados pela macro.
-    exemplo.metodo_a();
-    exemplo.metodo_b();
-    exemplo.metodo_c();
-}
+    // Criando uma instância da struct Pessoa
+    let pessoa = Pessoa {
+        nome: String::from("João"),
+        idade: 30,
+        email: String::from("joao@email.com"),
+    };
 
+    // Exemplo de acesso aos campos
+    println!("Nome: {}", pessoa.nome);
+    println!("Idade: {}", pessoa.idade);
+    println!("Email: {}", pessoa.email);
+}
 
