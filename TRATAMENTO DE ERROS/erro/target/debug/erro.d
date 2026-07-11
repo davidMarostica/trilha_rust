@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/TRATAMENTO\ DE\ ERROS/erro/target/debug/erro: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/TRATAMENTO\ DE\ ERROS/erro/src/main.rs
