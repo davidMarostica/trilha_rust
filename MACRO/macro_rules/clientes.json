@@ -1,0 +1,7 @@
+[
+    {"id": 1, "nome": "João Silva", "cpf": "123.456.789-00"},
+    {"id": 2, "nome": "Maria Oliveira", "cpf": "987.654.321-00"},
+    {"id": 3, "nome": "Fabiola", "cpf": "947.654.321-00"},
+    {"id": 4, "nome": "David", "cpf": "940.654.321-00"}
+
+]

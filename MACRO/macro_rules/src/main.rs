@@ -131,37 +131,76 @@
 
 //// ====== Macro para criar atributos =======
 
-macro_rules! define_struct_com_atributos {
-    // A macro aceita o nome da struct seguido por uma lista de pares (nome do atributo: tipo do atributo)
-    ($nome:ident, $($campo:ident: $tipo:ty),*) => {
+// macro_rules! define_struct_com_atributos {
+//     // A macro aceita o nome da struct seguido por uma lista de pares (nome do atributo: tipo do atributo)
+//     ($nome:ident, $($campo:ident: $tipo:ty),*) => {
+//         struct $nome {
+//             // Gera um campo para cada par nome:tipo fornecido
+//             $(
+//                 $campo: $tipo,
+//             )*
+//         }
+//     };
+// }
+
+// // Usando a macro para definir uma nova struct com atributos especificados
+// define_struct_com_atributos!(
+//     Pessoa,
+//     nome: String,
+//     idade: u8,
+//     email: String
+// );
+
+// fn main() {
+//     // Criando uma instância da struct Pessoa
+//     let pessoa = Pessoa {
+//         nome: String::from("João"),
+//         idade: 30,
+//         email: String::from("joao@email.com"),
+//     };
+
+//     // Exemplo de acesso aos campos
+//     println!("Nome: {}", pessoa.nome);
+//     println!("Idade: {}", pessoa.idade);
+//     println!("Email: {}", pessoa.email);
+// }
+
+/// ========== Exemplo JSON =========
+
+use serde::{Serialize, Deserialize};
+use serde_json::Result;
+use std::fs;
+
+
+macro_rules! cria_struct {
+    ($nome:ident { $($campo:ident: $tipo:ty),* $(,)? }) => {
+        #[derive(Debug, Serialize, Deserialize)]
         struct $nome {
-            // Gera um campo para cada par nome:tipo fornecido
-            $(
-                $campo: $tipo,
-            )*
+            $($campo: $tipo),*
         }
     };
 }
 
-// Usando a macro para definir uma nova struct com atributos especificados
-define_struct_com_atributos!(
-    Pessoa,
-    nome: String,
-    idade: u8,
-    email: String
-);
-
-fn main() {
-    // Criando uma instância da struct Pessoa
-    let pessoa = Pessoa {
-        nome: String::from("João"),
-        idade: 30,
-        email: String::from("joao@email.com"),
-    };
-
-    // Exemplo de acesso aos campos
-    println!("Nome: {}", pessoa.nome);
-    println!("Idade: {}", pessoa.idade);
-    println!("Email: {}", pessoa.email);
+// Exemplo de uso da macro para criar uma struct com base nos campos especificados
+cria_struct! {
+    Cliente {
+        id: u32,
+        nome: String,
+        cpf: String,
+    }
 }
 
+fn main() -> Result<()> {
+    // Lendo o arquivo JSON
+    let data = fs::read_to_string("clientes.json").expect("Falha ao ler arquivo");
+
+    // Deserializando o JSON para um Vec<Cliente>
+    let clientes: Vec<Cliente> = serde_json::from_str(&data)?;
+
+    // Iterando sobre os clientes e imprimindo seus dados
+    for cliente in clientes {
+        println!("{:?}", cliente);
+    }
+
+    Ok(())
+}
