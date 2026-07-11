@@ -99,84 +99,182 @@
 
 // =========== Error Types Customizados com Trait Debug ============
 
-use regex::Regex;
+// use regex::Regex;
+// use std::error::Error;
+// use std::fmt;
+
+
+// #[derive(Debug)]
+// enum ValidationError {
+//     EmptyName(String),
+//     NonUniqueName(String),
+//     InvalidFormat(String),
+// }
+
+// // Implementando Display para o nosso erro customizado
+// impl fmt::Display for ValidationError {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "{:?}", self)
+//     }
+// }
+
+// // Para que ValidationError possa ser tratado como um erro
+// impl Error for ValidationError {}
+
+// fn validar_nome(nome: &str, nomes_existentes: &[&str]) -> Result<(), Box<dyn Error>> {
+//     // Validar se o nome não está vazio
+//     if nome.is_empty() {
+//         return Err(Box::new(ValidationError::EmptyName("O nome não pode ser vazio".to_string())));
+//     } else if nomes_existentes.contains(&nome) {
+//         return Err(Box::new(ValidationError::NonUniqueName("O nome deve ser unico".to_string())));
+//     }
+
+//     // Validar o formato do nome com regex
+//     let regex = Regex::new(r"^[a-zA-Z\s]+$").unwrap();
+//     // Exemplos de Strings Válidas na REGEX
+//     //     "Alice"
+//     //     "Bob Smith"
+//     //     "a b c"
+//     //     "Z"
+
+//     if !regex.is_match(nome) {
+//         return Err(Box::new(ValidationError::InvalidFormat("O nome não está no padrão permitido".to_string())));
+//     }
+
+//     Ok(())
+// }
+
+// fn main() {
+//     let nomes_existentes = vec!["Alice", "Bob"];
+//     match validar_nome("Bob", &nomes_existentes) {
+//         Ok(_) => println!("Nome válido"),
+//         Err(e) => println!("Erro de validação: {}", e),
+//     }
+
+//     match validar_nome("", &nomes_existentes) {
+//         Ok(_) => println!("Nome válido"),
+//         Err(e) => println!("Erro de validação: {}", e),
+//     }
+
+//     match validar_nome("123 Danilo", &nomes_existentes) {
+//         Ok(_) => println!("Nome válido"),
+//         Err(e) => println!("Erro de validação: {}", e),
+//     }
+
+//     match validar_nome("Danilo", &nomes_existentes) {
+//         Ok(_) => println!("Nome válido"),
+//         Err(e) => println!("Erro de validação: {}", e),
+//     }
+
+//     match validar_nome("Alice", &nomes_existentes) {
+//         Ok(_) => println!("Nome válido"),
+//         Err(e) => {
+//             match e.downcast_ref::<ValidationError>().unwrap() {
+//                 ValidationError::EmptyName(erro) => println!("Erro de validação: o nome não pode ser vazio - {}", erro),
+//                 ValidationError::NonUniqueName(erro) => {
+//                     println!("{}", erro);
+//                     println!("Erro de validação: o nome não é único");
+//                     println!("Por favor, escolha um nome diferente.");
+//                 },
+//                 ValidationError::InvalidFormat(erro) => println!("Erro de validação: o formato do nome é inválido - {}", erro),
+//             }
+//         },
+//     }
+// }
+
+// // =========== Error Types Customizados com Trait Debug ============
 use std::error::Error;
-use std::fmt;
+use std::fs::File;
+use std::io::{self, Read};
+
+// Função que tenta ler o conteúdo de um arquivo para uma String
+fn ler_conteudo_arquivo(nome_arquivo: &str) -> Result<String, io::Error> {
+    let mut f = File::open(nome_arquivo)?; // Se falhar, retorna o erro para o chamador
+    let mut conteudo = String::new();
+    f.read_to_string(&mut conteudo)?; // Se falhar, retorna o erro para o chamador
+    Ok(conteudo) // Retorna o conteúdo do arquivo em caso de sucesso
+}
 
 
 #[derive(Debug)]
-enum ValidationError {
-    EmptyName(String),
-    NonUniqueName(String),
-    InvalidFormat(String),
+enum ErroDeTransacao {
+    SaldoInsuficiente { saldo_atual: f64, tentativa_saque: f64 },
+    ErroDeAutenticacao,
+    ErroDeRede,
+    ErroComFonte { mensagem: String, fonte: Box<dyn Error> }, // Novo
 }
 
-// Implementando Display para o nosso erro customizado
-impl fmt::Display for ValidationError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self)
+impl std::fmt::Display for ErroDeTransacao {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            ErroDeTransacao::SaldoInsuficiente { saldo_atual, tentativa_saque } => {
+                write!(f, "Saldo insuficiente: saldo atual R${}, tentativa de saque R${}", saldo_atual, tentativa_saque)
+            },
+            ErroDeTransacao::ErroDeAutenticacao => {
+                write!(f, "Erro de autenticação: usuário não pode ser autenticado")
+            },
+            ErroDeTransacao::ErroDeRede => {
+                write!(f, "Erro de rede: não foi possível conectar ao servidor")
+            },
+            ErroDeTransacao::ErroComFonte { mensagem, fonte } => {
+                write!(f, "{}: {}", mensagem, fonte)
+            },
+        }
     }
 }
 
-// Para que ValidationError possa ser tratado como um erro
-impl Error for ValidationError {}
+// Implementando o trait Error
+impl std::error::Error for ErroDeTransacao {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            ErroDeTransacao::ErroComFonte { fonte, .. } => Some(fonte.as_ref()),
+            _ => None,
+        }
+    }
+}
 
-fn validar_nome(nome: &str, nomes_existentes: &[&str]) -> Result<(), Box<dyn Error>> {
-    // Validar se o nome não está vazio
-    if nome.is_empty() {
-        return Err(Box::new(ValidationError::EmptyName("O nome não pode ser vazio".to_string())));
-    } else if nomes_existentes.contains(&nome) {
-        return Err(Box::new(ValidationError::NonUniqueName("O nome deve ser unico".to_string())));
+fn processar_transacao(valor: f64, autenticado: bool, falha_na_rede: bool, com_fonte: bool) -> Result<(), ErroDeTransacao> {
+    let saldo = 100.0; // Supondo um saldo de conta fictício
+    if valor > saldo {
+        return Err(ErroDeTransacao::SaldoInsuficiente { saldo_atual: saldo, tentativa_saque: valor });
     }
 
-    // Validar o formato do nome com regex
-    let regex = Regex::new(r"^[a-zA-Z\s]+$").unwrap();
-    // Exemplos de Strings Válidas na REGEX
-    //     "Alice"
-    //     "Bob Smith"
-    //     "a b c"
-    //     "Z"
-
-    if !regex.is_match(nome) {
-        return Err(Box::new(ValidationError::InvalidFormat("O nome não está no padrão permitido".to_string())));
+    // Simulando um erro de autenticação
+    if !autenticado {
+        return Err(ErroDeTransacao::ErroDeAutenticacao);
     }
 
+    // Simulando um erro de rede
+    if falha_na_rede {
+        return Err(ErroDeTransacao::ErroDeRede);
+    }
+
+    if com_fonte {
+        let result_arquivo: Result<String, io::Error> = ler_conteudo_arquivo("arquivo.txt");
+        match result_arquivo {
+            Ok(_) => { },
+            Err(erro) => {
+                return Err(ErroDeTransacao::ErroComFonte {
+                    mensagem: "Erro ao abrir arquivo".to_string(),
+                    fonte: Box::new(erro),
+                });
+            }
+        }
+    }
+
+    // Se chegarmos aqui, supomos que a transação foi bem-sucedida
     Ok(())
 }
 
 fn main() {
-    let nomes_existentes = vec!["Alice", "Bob"];
-    match validar_nome("Bob", &nomes_existentes) {
-        Ok(_) => println!("Nome válido"),
-        Err(e) => println!("Erro de validação: {}", e),
-    }
-
-    match validar_nome("", &nomes_existentes) {
-        Ok(_) => println!("Nome válido"),
-        Err(e) => println!("Erro de validação: {}", e),
-    }
-
-    match validar_nome("123 Danilo", &nomes_existentes) {
-        Ok(_) => println!("Nome válido"),
-        Err(e) => println!("Erro de validação: {}", e),
-    }
-
-    match validar_nome("Danilo", &nomes_existentes) {
-        Ok(_) => println!("Nome válido"),
-        Err(e) => println!("Erro de validação: {}", e),
-    }
-
-    match validar_nome("Alice", &nomes_existentes) {
-        Ok(_) => println!("Nome válido"),
+    match processar_transacao(10.0, true, false, true) {
+        Ok(_) => println!("Transação processada com sucesso"),
         Err(e) => {
-            match e.downcast_ref::<ValidationError>().unwrap() {
-                ValidationError::EmptyName(erro) => println!("Erro de validação: o nome não pode ser vazio - {}", erro),
-                ValidationError::NonUniqueName(erro) => {
-                    println!("{}", erro);
-                    println!("Erro de validação: o nome não é único");
-                    println!("Por favor, escolha um nome diferente.");
-                },
-                ValidationError::InvalidFormat(erro) => println!("Erro de validação: o formato do nome é inválido - {}", erro),
+            println!("Falha ao processar transação: {}", e);
+
+            // Aqui, você também pode acessar a causa raiz ou backtrace se necessário (requer 'std::error::Error')
+            if let Some(source) = e.source() {
+                println!("Causado por: {}", source);
             }
         },
     }
