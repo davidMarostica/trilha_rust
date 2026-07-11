@@ -167,40 +167,79 @@
 
 /// ========== Exemplo JSON =========
 
-use serde::{Serialize, Deserialize};
-use serde_json::Result;
-use std::fs;
+// use serde::{Serialize, Deserialize};
+// use serde_json::Result;
+// use std::fs;
 
 
-macro_rules! cria_struct {
-    ($nome:ident { $($campo:ident: $tipo:ty),* $(,)? }) => {
-        #[derive(Debug, Serialize, Deserialize)]
-        struct $nome {
-            $($campo: $tipo),*
-        }
-    };
-}
+// macro_rules! cria_struct {
+//     ($nome:ident { $($campo:ident: $tipo:ty),* $(,)? }) => {
+//         #[derive(Debug, Serialize, Deserialize)]
+//         struct $nome {
+//             $($campo: $tipo),*
+//         }
+//     };
+// }
 
-// Exemplo de uso da macro para criar uma struct com base nos campos especificados
-cria_struct! {
+// // Exemplo de uso da macro para criar uma struct com base nos campos especificados
+// cria_struct! {
+//     Cliente {
+//         id: u32,
+//         nome: String,
+//         cpf: String,
+//     }
+// }
+
+// fn main() -> Result<()> {
+//     // Lendo o arquivo JSON
+//     let data = fs::read_to_string("clientes.json").expect("Falha ao ler arquivo");
+
+//     // Deserializando o JSON para um Vec<Cliente>
+//     let clientes: Vec<Cliente> = serde_json::from_str(&data)?;
+
+//     // Iterando sobre os clientes e imprimindo seus dados
+//     for cliente in clientes {
+//         println!("{:?}", cliente);
+//     }
+
+//     Ok(())
+// }
+
+
+// ///// ========== Usando Cria struct com metodo de uma crate =========
+
+
+#[macro_use]
+extern crate minha_macro_lib2;
+
+cria_struct_crate_lib! {
     Cliente {
         id: u32,
         nome: String,
         cpf: String,
     }
-}
 
-fn main() -> Result<()> {
-    // Lendo o arquivo JSON
-    let data = fs::read_to_string("clientes.json").expect("Falha ao ler arquivo");
-
-    // Deserializando o JSON para um Vec<Cliente>
-    let clientes: Vec<Cliente> = serde_json::from_str(&data)?;
-
-    // Iterando sobre os clientes e imprimindo seus dados
-    for cliente in clientes {
-        println!("{:?}", cliente);
+    fn mostra_nome(&self) -> String {
+        format!("Nome: {}", self.nome)
     }
 
-    Ok(())
+    fn mostra_id(&self) -> String {
+        format!("ID: {}", self.id)
+    }
+
+    fn mais_numero_no_id(&self, numero: u32) -> String {
+        format!("ID + Numero: {}", self.id + numero)
+    }
+}
+
+fn main() {
+    let cliente = Cliente {
+        id: 1,
+        nome: "David Aparecido da Silva".to_string(),
+        cpf: "123.456.789-00".to_string(),
+    };
+
+    println!("{}", cliente.mostra_nome());
+    println!("{}", cliente.mostra_id());
+    println!("{}", cliente.mais_numero_no_id(10));
 }

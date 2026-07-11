@@ -1,8 +1,9 @@
 [package]
-name = "macro_rules"
+name = "projeto_binario"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
+minha_macro_lib2 = { path = "./minha_macro_lib2" }
