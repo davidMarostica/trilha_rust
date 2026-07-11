@@ -79,20 +79,105 @@
 
 // //// ========= ? = retorna o erro para o chamador =====
 
-use std::fs::File;
-use std::io::{self, Read};
+// use std::fs::File;
+// use std::io::{self, Read};
 
-// Função que tenta ler o conteúdo de um arquivo para uma String
-fn ler_conteudo_arquivo(nome_arquivo: &str) -> Result<String, io::Error> {
-    let mut f = File::open(nome_arquivo)?; // Se falhar, retorna o erro para o chamador
-    let mut conteudo = String::new();
-    f.read_to_string(&mut conteudo)?; // Se falhar, retorna o erro para o chamador
-    Ok(conteudo) // Retorna o conteúdo do arquivo em caso de sucesso
+// // Função que tenta ler o conteúdo de um arquivo para uma String
+// fn ler_conteudo_arquivo(nome_arquivo: &str) -> Result<String, io::Error> {
+//     let mut f = File::open(nome_arquivo)?; // Se falhar, retorna o erro para o chamador
+//     let mut conteudo = String::new();
+//     f.read_to_string(&mut conteudo)?; // Se falhar, retorna o erro para o chamador
+//     Ok(conteudo) // Retorna o conteúdo do arquivo em caso de sucesso
+// }
+
+// fn main() -> Result<(), io::Error> {
+//     let nome_arquivo = "exemplo.txt";
+//     let conteudo = ler_conteudo_arquivo(nome_arquivo)?; // Propaga erro se houver
+//     println!("Conteúdo do arquivo:\n{}", conteudo);
+//     Ok(())
+// }
+
+// =========== Error Types Customizados com Trait Debug ============
+
+use regex::Regex;
+use std::error::Error;
+use std::fmt;
+
+
+#[derive(Debug)]
+enum ValidationError {
+    EmptyName(String),
+    NonUniqueName(String),
+    InvalidFormat(String),
 }
 
-fn main() -> Result<(), io::Error> {
-    let nome_arquivo = "exemplo.txt";
-    let conteudo = ler_conteudo_arquivo(nome_arquivo)?; // Propaga erro se houver
-    println!("Conteúdo do arquivo:\n{}", conteudo);
+// Implementando Display para o nosso erro customizado
+impl fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+// Para que ValidationError possa ser tratado como um erro
+impl Error for ValidationError {}
+
+fn validar_nome(nome: &str, nomes_existentes: &[&str]) -> Result<(), Box<dyn Error>> {
+    // Validar se o nome não está vazio
+    if nome.is_empty() {
+        return Err(Box::new(ValidationError::EmptyName("O nome não pode ser vazio".to_string())));
+    } else if nomes_existentes.contains(&nome) {
+        return Err(Box::new(ValidationError::NonUniqueName("O nome deve ser unico".to_string())));
+    }
+
+    // Validar o formato do nome com regex
+    let regex = Regex::new(r"^[a-zA-Z\s]+$").unwrap();
+    // Exemplos de Strings Válidas na REGEX
+    //     "Alice"
+    //     "Bob Smith"
+    //     "a b c"
+    //     "Z"
+
+    if !regex.is_match(nome) {
+        return Err(Box::new(ValidationError::InvalidFormat("O nome não está no padrão permitido".to_string())));
+    }
+
     Ok(())
+}
+
+fn main() {
+    let nomes_existentes = vec!["Alice", "Bob"];
+    match validar_nome("Bob", &nomes_existentes) {
+        Ok(_) => println!("Nome válido"),
+        Err(e) => println!("Erro de validação: {}", e),
+    }
+
+    match validar_nome("", &nomes_existentes) {
+        Ok(_) => println!("Nome válido"),
+        Err(e) => println!("Erro de validação: {}", e),
+    }
+
+    match validar_nome("123 Danilo", &nomes_existentes) {
+        Ok(_) => println!("Nome válido"),
+        Err(e) => println!("Erro de validação: {}", e),
+    }
+
+    match validar_nome("Danilo", &nomes_existentes) {
+        Ok(_) => println!("Nome válido"),
+        Err(e) => println!("Erro de validação: {}", e),
+    }
+
+    match validar_nome("Alice", &nomes_existentes) {
+        Ok(_) => println!("Nome válido"),
+        Err(e) => {
+            match e.downcast_ref::<ValidationError>().unwrap() {
+                ValidationError::EmptyName(erro) => println!("Erro de validação: o nome não pode ser vazio - {}", erro),
+                ValidationError::NonUniqueName(erro) => {
+                    println!("{}", erro);
+                    println!("Erro de validação: o nome não é único");
+                    println!("Por favor, escolha um nome diferente.");
+                },
+                ValidationError::InvalidFormat(erro) => println!("Erro de validação: o formato do nome é inválido - {}", erro),
+            }
+        },
+    }
 }
