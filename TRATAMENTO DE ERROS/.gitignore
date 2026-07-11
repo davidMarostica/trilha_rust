@@ -1,14 +1,13 @@
-# Arquivos de compilação
-/target/
-
-# Arquivos de configuração locais
-Cargo.lock
+# Diretórios de compilação do Rust
+**/target/
 
 # Arquivos temporários
 *.log
 *.tmp
 
-# Arquivos do editor
+# Configurações de IDE
 .vscode/
 .idea/
+
+# Arquivos temporários do Vim
 *.swp
