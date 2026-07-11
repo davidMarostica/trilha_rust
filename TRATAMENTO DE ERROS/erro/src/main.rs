@@ -27,31 +27,50 @@
 //     Err(E),
 // }
 
-fn calcular_raiz_quadrada(numero: f64) -> Result<f64, String> {
-    if numero >= 0.0 {
-        Ok(numero.sqrt()) // Retorna a raiz quadrada do número
-    } else {
-        Err(String::from("número negativo não possui raiz quadrada real")) // Retorna um erro
-    }
-}
+// fn calcular_raiz_quadrada(numero: f64) -> Result<f64, String> {
+//     if numero >= 0.0 {
+//         Ok(numero.sqrt()) // Retorna a raiz quadrada do número
+//     } else {
+//         Err(String::from("número negativo não possui raiz quadrada real")) // Retorna um erro
+//     }
+// }
 
-fn calcular_raiz_quadrada2(numero: f64) -> Result<f64, String> {
-    let r = calcular_raiz_quadrada(numero)?; // Se Err, retorna imediatamente
-    Ok(r) // Se Ok, retorna o valor
+// fn calcular_raiz_quadrada2(numero: f64) -> Result<f64, String> {
+//     let r = calcular_raiz_quadrada(numero)?; // Se Err, retorna imediatamente
+//     Ok(r) // Se Ok, retorna o valor
+// }
+
+// fn main() {
+//     let numero = -4.0;
+
+//     // Usando a primeira função
+//     match calcular_raiz_quadrada(numero) {
+//         Ok(raiz) => println!("A raiz quadrada de {} é {}", numero, raiz),
+//         Err(e) => println!("Erro: {}", e),
+//     }
+
+//     // Usando a segunda função com operador ?
+//     match calcular_raiz_quadrada2(numero) {
+//         Ok(raiz) => println!("Versão 2: raiz quadrada de {} é {}", numero, raiz),
+//         Err(e) => println!("Versão 2: erro -> {}", e),
+//     }
+// }
+
+
+use std::fs::File;
+use std::io;
+use std::io::Read;
+
+fn ler_arquivo(nome: &str) -> Result<String, io::Error> {
+    let mut f = File::open(nome)?; // Se não conseguir abrir, retorna Err(io::Error)
+    let mut s = String::new();
+    f.read_to_string(&mut s)?; // Se não conseguir ler, retorna Err(io::Error)
+    Ok(s) // Se tudo deu certo, retorna o conteúdo
 }
 
 fn main() {
-    let numero = -4.0;
-
-    // Usando a primeira função
-    match calcular_raiz_quadrada(numero) {
-        Ok(raiz) => println!("A raiz quadrada de {} é {}", numero, raiz),
-        Err(e) => println!("Erro: {}", e),
-    }
-
-    // Usando a segunda função com operador ?
-    match calcular_raiz_quadrada2(numero) {
-        Ok(raiz) => println!("Versão 2: raiz quadrada de {} é {}", numero, raiz),
-        Err(e) => println!("Versão 2: erro -> {}", e),
+    match ler_arquivo("meu_arquivo.txt") {
+        Ok(conteudo) => println!("Conteúdo do arquivo: {}", conteudo),
+        Err(e) => println!("Falha ao abrir o arquivo: {}", e),
     }
 }
