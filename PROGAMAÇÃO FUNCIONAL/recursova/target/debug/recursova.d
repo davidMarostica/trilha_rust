@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/PROGAMAÇÃO\ FUNCIONAL/recursova/target/debug/recursova: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/PROGAMAÇÃO\ FUNCIONAL/recursova/src/main.rs
