@@ -114,29 +114,49 @@ Em resumo:
 
 // === Abordagem funcional calculo salario com closure =======
 
-fn main() {
-    let salario_bruto = 6000.0;
+// fn main() {
+//     let salario_bruto = 6000.0;
 
-    // Cálculo do salário líquido usando closures
-    let calcular_salario_liquido = |salario_bruto: f64| {
-        // Closure para desconto do plano de saúde
-        let desconto_plano_saude = |salario: f64| salario * 0.10;
+//     // Cálculo do salário líquido usando closures
+//     let calcular_salario_liquido = |salario_bruto: f64| {
+//         // Closure para desconto do plano de saúde
+//         let desconto_plano_saude = |salario: f64| salario * 0.10;
 
-        // Closure para desconto do plano dentário
-        let desconto_plano_dentario = |salario: f64| salario * 0.05;
+//         // Closure para desconto do plano dentário
+//         let desconto_plano_dentario = |salario: f64| salario * 0.05;
 
-        // Closure para desconto de vale-refeição
-        let desconto_vale_refeicao = |salario: f64| salario * 0.03;
+//         // Closure para desconto de vale-refeição
+//         let desconto_vale_refeicao = |salario: f64| salario * 0.03;
 
-        let desconto_saude = desconto_plano_saude(salario_bruto);
-        let desconto_dentario = desconto_plano_dentario(salario_bruto);
-        let desconto_refeicao = desconto_vale_refeicao(salario_bruto);
+//         let desconto_saude = desconto_plano_saude(salario_bruto);
+//         let desconto_dentario = desconto_plano_dentario(salario_bruto);
+//         let desconto_refeicao = desconto_vale_refeicao(salario_bruto);
 
-        salario_bruto - desconto_saude - desconto_dentario - desconto_refeicao
-    };
+//         salario_bruto - desconto_saude - desconto_dentario - desconto_refeicao
+//     };
 
-    let salario_liquido = calcular_salario_liquido(salario_bruto);
-    println!("Salário líquido: {:.2}", salario_liquido);
+//     let salario_liquido = calcular_salario_liquido(salario_bruto);
+//     println!("Salário líquido: {:.2}", salario_liquido);
+// }
+
+
+// -------------------Pattern Matching-------------------------
+enum Semafaro {
+    Verde,
+    Amarelo,
+    Vermelho,
 }
 
+fn acao(semafaro: Semafaro) {
+    match semafaro {
+        Semafaro::Verde => println!("Siga"),
+        Semafaro::Amarelo => println!("Atenção"),
+        Semafaro::Vermelho => println!("Pare"),
+    }
+}
 
+fn main() {
+    acao(Semafaro::Verde);
+    acao(Semafaro::Amarelo);
+    acao(Semafaro::Vermelho);
+}
