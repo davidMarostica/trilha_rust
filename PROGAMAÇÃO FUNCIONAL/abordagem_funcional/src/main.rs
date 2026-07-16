@@ -78,36 +78,65 @@ Em resumo:
 // }
 
 
-// === Abordagem funcional calculo salario funções separadas =======
+// // === Abordagem funcional calculo salario funções separadas =======
+
+// fn main() {
+//     let salario_bruto = 15000.0;
+
+//     // Função interna para desconto do plano de saúde
+//     fn desconto_plano_saude(salario: f64) -> f64 {
+//         salario * 0.10 // Desconto de 10%
+//     }
+
+//     // Função interna para desconto do plano dentário
+//     fn desconto_plano_dentario(salario: f64) -> f64 {
+//         salario * 0.05 // Desconto de 5%
+//     }
+
+//     // Função interna para desconto de vale-refeição
+//     fn desconto_vale_refeicao(salario: f64) -> f64 {
+//         salario * 0.03 // Desconto de 3%
+//     }
+
+//     // Cálculo do salário líquido
+//     fn calcular_salario_liquido(salario_bruto: f64) -> f64 {
+//         let desconto_saude = desconto_plano_saude(salario_bruto);
+//         let desconto_dentario = desconto_plano_dentario(salario_bruto);
+//         let desconto_refeicao = desconto_vale_refeicao(salario_bruto);
+
+//         salario_bruto - desconto_saude - desconto_dentario - desconto_refeicao
+//     }
+
+//     let salario_liquido = calcular_salario_liquido(salario_bruto);
+
+//     println!("Salário líquido: {:.2}", salario_liquido);
+// }
+
+// === Abordagem funcional calculo salario com closure =======
 
 fn main() {
-    let salario_bruto = 15000.0;
+    let salario_bruto = 6000.0;
 
-    // Função interna para desconto do plano de saúde
-    fn desconto_plano_saude(salario: f64) -> f64 {
-        salario * 0.10 // Desconto de 10%
-    }
+    // Cálculo do salário líquido usando closures
+    let calcular_salario_liquido = |salario_bruto: f64| {
+        // Closure para desconto do plano de saúde
+        let desconto_plano_saude = |salario: f64| salario * 0.10;
 
-    // Função interna para desconto do plano dentário
-    fn desconto_plano_dentario(salario: f64) -> f64 {
-        salario * 0.05 // Desconto de 5%
-    }
+        // Closure para desconto do plano dentário
+        let desconto_plano_dentario = |salario: f64| salario * 0.05;
 
-    // Função interna para desconto de vale-refeição
-    fn desconto_vale_refeicao(salario: f64) -> f64 {
-        salario * 0.03 // Desconto de 3%
-    }
+        // Closure para desconto de vale-refeição
+        let desconto_vale_refeicao = |salario: f64| salario * 0.03;
 
-    // Cálculo do salário líquido
-    fn calcular_salario_liquido(salario_bruto: f64) -> f64 {
         let desconto_saude = desconto_plano_saude(salario_bruto);
         let desconto_dentario = desconto_plano_dentario(salario_bruto);
         let desconto_refeicao = desconto_vale_refeicao(salario_bruto);
 
         salario_bruto - desconto_saude - desconto_dentario - desconto_refeicao
-    }
+    };
 
     let salario_liquido = calcular_salario_liquido(salario_bruto);
-
     println!("Salário líquido: {:.2}", salario_liquido);
 }
+
+
