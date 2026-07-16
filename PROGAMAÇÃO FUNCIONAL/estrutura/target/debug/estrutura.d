@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/PROGAMAÇÃO\ FUNCIONAL/estrutura/target/debug/estrutura: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/PROGAMAÇÃO\ FUNCIONAL/estrutura/src/main.rs
