@@ -37,20 +37,52 @@
 
 // === Função de Alta Ordem =======
 
+// fn main() {
+//     let salario_bruto = 5000.0;
+
+//     // Função de alta ordem que aplica descontos ao salário
+//     fn aplicar_descontos(salario: f64, descontos: Vec<fn(f64) -> f64>) -> f64 {
+//         let total_descontos = descontos.iter().fold(0.0, |valor_param, funcao_closure| valor_param + funcao_closure(salario));
+//         salario - total_descontos
+//     }
+
+//     // Cálculo do salário líquido usando a função de alta ordem
+//     let salario_liquido = aplicar_descontos(salario_bruto, vec![
+//         |salario: f64| salario * 0.10, // Desconto do plano de saúde: 10%
+//         |salario: f64| salario * 0.05, // Desconto do plano dentário: 5%
+//         |salario: f64| salario * 0.03, // Desconto de vale-refeição: 3%
+//     ]);
+
+//     println!("Salário líquido: {:.2}", salario_liquido);
+// }
+
+// === Função de Alta Ordem =======
+fn desconto_plano_saude(salario: f64) -> f64 {
+    salario * 0.10 // Desconto de 10%
+}
+
+fn desconto_plano_dentario(salario: f64) -> f64 {
+    salario * 0.05 // Desconto de 5%
+}
+
+fn desconto_vale_refeicao(salario: f64) -> f64 {
+    salario * 0.03 // Desconto de 3%
+}
+
+// Função de alta ordem que aplica descontos ao salário
+fn aplicar_descontos(salario: f64, descontos: Vec<fn(f64) -> f64>) -> f64 {
+    let total_descontos = descontos.iter().fold(0.0, |valor_param, funcao_closure| valor_param + funcao_closure(salario));
+    salario - total_descontos
+}
+
 fn main() {
     let salario_bruto = 5000.0;
 
-    // Função de alta ordem que aplica descontos ao salário
-    fn aplicar_descontos(salario: f64, descontos: Vec<fn(f64) -> f64>) -> f64 {
-        let total_descontos = descontos.iter().fold(0.0, |valor_param, funcao_closure| valor_param + funcao_closure(salario));
-        salario - total_descontos
-    }
-
     // Cálculo do salário líquido usando a função de alta ordem
     let salario_liquido = aplicar_descontos(salario_bruto, vec![
-        |salario: f64| salario * 0.10, // Desconto do plano de saúde: 10%
-        |salario: f64| salario * 0.05, // Desconto do plano dentário: 5%
-        |salario: f64| salario * 0.03, // Desconto de vale-refeição: 3%
+        desconto_plano_saude,
+        desconto_plano_dentario,
+        desconto_vale_refeicao,
     ]);
 
     println!("Salário líquido: {:.2}", salario_liquido);
