@@ -1,0 +1,12 @@
+# Diretórios de compilação do Rust
+**/target/
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Configurações de IDE
+.vscode/
+.idea/
+
+# Arquivos temporários do Vim
