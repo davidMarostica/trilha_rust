@@ -1,0 +1,1 @@
+/home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/CONCORENCIE_PARALELISMO/migracao/target/debug/migracao: /home/david/Área\ de\ Trabalho/Programação\ /Rust/trilha_rust/CONCORENCIE_PARALELISMO/migracao/src/main.rs
